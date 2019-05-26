@@ -1,0 +1,130 @@
+ % main.tex
+ % Chris Miller - crm313@nyu.edu
+ % main body of "Wavelet Scattering in Chroma Space"
+ %
+ 
+
+\documentclass[12pt]{article}
+
+\usepackage{times}
+\usepackage{epsfig}
+\usepackage{graphicx}
+\usepackage{subfig}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{fancyhdr}
+\usepackage{color}
+\usepackage{cite}
+\usepackage{dsfont}
+
+\usepackage{epstopdf} % convert eps to pdf
+
+\usepackage{bm}
+\usepackage{stmaryrd}
+\usepackage{xspace}
+\usepackage{IEEEtrantools}
+\newcommand*{\eg}{e.g.\@\xspace}
+\newcommand*{\ie}{i.e.\@\xspace}
+\newcommand*{\etal}{et al.\@\xspace}
+
+\makeatletter
+\DeclareRobustCommand{\Circ}{%
+  \mathop{\vphantom{\sum}\mathpalette\Circ@\relax}\slimits@
+}
+
+\newcommand{\Circ@}[2]{%
+  \vcenter{%
+    \sbox\z@{$#1\sum$}%
+    \hbox{\resizebox{.9\dimexpr\ht\z@+\dp\z@}{!}{$\m@th\circ$}}%
+  }%
+}
+\makeatother
+
+\newcommand{\Amin}{\texttt{A:min7}\@\xspace}
+\newcommand{\Csix}{\texttt{C:maj6}\@\xspace}
+\newcommand{\pcset}{\texttt{\{C,E,G,A\}}\@\xspace}
+\newcommand{\rootA}{\texttt{A}\@\xspace}
+\newcommand{\fifthE}{\text{E}\@\xspace}
+\newcommand{\mirex}{mirex}
+\newcommand{\tetradsinv}{tetrads\_inv}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% define an Acknowledgements page format
+\makeatletter
+\newcommand\ackname{Acknowledgements}
+\if@titlepage
+  \newenvironment{acknowledgements}{%
+      \titlepage
+      \null\vfil
+      \@beginparpenalty\@lowpenalty
+      \begin{center}%
+        \bfseries \ackname
+        \@endparpenalty\@M
+      \end{center}}%
+     {\par\vfil\null\endtitlepage}
+\else
+  \newenvironment{acknowledgements}{%
+      \if@twocolumn
+        \section*{\abstractname}%
+      \else
+        \small
+        \begin{center}%
+          {\bfseries \ackname\vspace{-.5em}\vspace{\z@}}%
+        \end{center}%
+        \quotation
+      \fi}
+      {\if@twocolumn\else\endquotation\fi}
+\fi
+\makeatother
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+% Title and Author
+\author{Christopher Miller} 
+\title{Wavelet Scattering In Chroma Space}
+\date{}
+\maketitle
+
+\vspace{75mm}
+
+\begin{center}
+Submitted in partial fulfillment of the requirements for the \\
+Master of Music in Music Technology \\
+in the Department of Music and Performing Arts Professions \\
+Steinhardt School \\
+New York University \\
+
+\vspace{10mm}
+
+Advisor: Juan P. Bello \\
+Reader: TheNameOfYour2ndReader \\
+
+\vspace{10mm}
+\date{\today}
+\end{center}
+\thispagestyle{empty}
+
+
+% Included sections
+% This document is single-sided
+\include{abstract}
+\include{acknowledgments}
+\include{contents}
+
+\include{introduction}
+\include{scattering}
+\include{multibandchroma}
+\include{haarscattering}
+\include{chordestimation}
+\include{conclusions}
+% Add more chapters as necessary...
+
+\include{bibliography}
+\appendix 
+\include{appendix}
+
+\end{document}

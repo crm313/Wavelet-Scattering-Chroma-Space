@@ -1,0 +1,85 @@
+% introduction.tex
+% 
+% LaTeX document from NYU music technology master's thesis
+
+\section{Introduction}
+\label{introduction}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Chord sequences provide a succinct description of tonal music and are often written down on lead sheets for the use of
+accompanists and improvisers.
+Besides its original purpose in music education and transmission, the knowledge of
+harmonic content has been leveraged in music information research to address higher-level
+tasks, including cover song identification \cite{ellis2007identifying},
+genre recognition \cite{perez2009genre}, and lyrics-to-audio alignment
+\cite{mauch2012integrating}. We refer to the review of
+\cite{mcvicar2014automatic} for a recent state of the art.
+
+All evaluation metrics for automatic
+chord estimation share the following basic property:
+a chord label remains the same if all its components are jointly
+transposed by one octave, be it upwards or downwards.
+In order to comply with this requirement, the vast majority of existing
+chord estimation systems rely on the chroma representation, \ie a 12-dimensional vector
+derived from a log-frequency spectrum
+(such as the constant-Q transform) by summing up all
+frequency bands which share the same pitch class according to
+the twelve-tone equal temperament.
+However, it should be noted that the chroma representation is not
+only invariant to octave transposition, but also to any permutation
+of the chord factors --- an operation known in music theory
+as inversion.
+Although major and minor triads are unchanged by inversion,
+some less common chords, such as augmented triads and minor seventh
+tetrads, are conditional upon the position of the root.
+
+\begin{figure}[b]
+    \begin{center}
+        \setlength{\unitlength}{1cm}
+        \begin{picture}(8.2,1.5)
+        \put(-0.1,-0.5){\includegraphics[width=8.2cm]{figs/sheet_music.png}}
+        \end{picture}
+    \end{center}
+    \protect\caption{
+Three possible voicings of the pitch class set
+\pcset, resulting either in the chord \Amin
+or \Csix. See text for details.
+\label{fig:sheet-music}
+}
+\end{figure}
+
+Figure \ref{fig:sheet-music} illustrates the importance of disambiguating inversions
+when transcribing chords, which has previously been addressed by
+\cite{mauch2010approximate}.
+The first two voicings are identical up
+to octave transposition of all the chord factors, and thus have the
+same chord label \Amin.
+In contrast, the third voicing is labeled as \Csix 
+ in root position, although its third inversion would correspond
+to the first voicing.
+
+With the aim of improving automatic chord estimation (ACE) under fine-grained
+evaluation metrics for large chord vocabularies (157 chord classes), this thesis introduces two feature extraction methods
+that are invariant to octave transposition, yet sensitive to
+chord inversion.
+The first consists of computing a Haar wavelet transform of
+the constant-Q spectrum along the octave variable and storing
+the absolute values of the resulting coefficients at all scales
+and positions.
+The second iterates the Haar wavelet modulus nonlinear operator
+over increasing scales, until reaching the full extent of the
+constant-Q spectrum.
+Both methods build upon the large chord vocabulary ACE software of
+\cite{cho2013mirex}, which holds state-of-the-art performance on
+the McGill Billboard dataset \cite{burgoyne2011}.
+
+Section 2 of this thesis reviews the basic components of automatic chord estimation systems, describing in particular the multiband chroma features, as
+introduced by \cite{cho2013mirex}, and their integration into a multi-stream
+hidden Markov model.
+Section 3 reviews the scattering transform as introduced by Mallat in \cite{mallat2012group}.
+Section 4 defines the Haar wavelet transform across octaves
+of the constant-Q spectrum and the deep Haar scattering transform, and compares these new representations with the multiband chroma.
+Section 5 presents and discusses the experimental setup along with the
+evaluation metrics for chord estimation accuracy.
+Section 6 presents the results of large vocabulary chord estimation comparing all three feature extraction methods and Section 7 provides extended analysis at all points throughout the chord recognition system. Finally, Section 8 concludes this thesis.

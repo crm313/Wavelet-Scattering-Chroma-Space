@@ -1,0 +1,372 @@
+% haarscattering.tex
+% Chris Miller - crm313@nyu.edu
+% 
+
+
+\section{Haar Wavelets In Chroma Space}
+\label{sec:haarwavelets}
+
+In this section, we introduce an alternative set of features for harmonic content, namely
+the absolute value of Haar wavelet coefficients, which satisfies statistical independence since
+it is derived from an orthogonal basis of $\mathbb{R}^K$.
+All subsequent operations apply to the octave variable $u$,
+and are vectorized in terms of time $t$ and chroma $q$.
+To alleviate notations, we replace the three-way tensor $\mathbf{X}[t, q, u]$
+by a vector $\boldsymbol{x}[u]$, thus leaving the indices $t$ and $q$ implicit.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Haar Wavelet Transform}
+\label{sec:haar}
+
+The Haar wavelet $\boldsymbol{\psi}$ is a piecewise constant,
+real function of compact support,
+consisting of two steps of equal length and opposite values.
+Within a discrete framework,
+it is defined by the following formula:
+\begin{equation}
+\forall u \in \mathbb{Z}, \;
+\boldsymbol{\psi}[u] = \left\{ \begin{array}{cl}
+\frac{-1}{\sqrt{2}} & \mbox{if }u = 0\\
+\frac{1}{\sqrt{2}} & \mbox{if }u = 1\\
+0 & \mbox{otherwise}
+\end{array}\right.
+\end{equation}
+The ``mother'' wavelet $\boldsymbol{\psi}[u]$ is translated and dilated by powers of two, so as to
+produce a family of discrete sequences
+$\boldsymbol{\psi_{j,b}}[u] = 2^{\frac{j-1}{2}} \boldsymbol{\psi}[2^{(j-1)} (u - 2b)]$
+indexed by the scale parameter $j \in \mathbb{N^*}$
+and the translation parameter $b \in \mathbb{Z}$.
+Some Haar wavelets are shown on Figure \ref{fig:haar-wavelets}
+for various values of $j$ and $b$.
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=9cm]{figs/haar_functions.eps}
+\caption{Three elements of the Haar wavelet basis $\{ \boldsymbol{\psi_{j,b}}\}$
+for various values of the scale index $j$ and the translation index $b$.
+See text for details.}
+\label{fig:haar-wavelets}
+\end{center}
+\end{figure}
+
+After endowing them with the Euclidean inner product
+\begin{equation}
+\langle \boldsymbol{\psi_{j,b}} \vert \boldsymbol{\psi_{j^\prime,b^\prime}} \rangle
+ =
+ \sum_{u = -\infty}^{+\infty}
+ \boldsymbol{\psi_{j, b}}[u]
+  \boldsymbol{\psi_{j^\prime,b^\prime}}[u],
+\end{equation}
+the wavelets $\{\boldsymbol{\psi_{j,b}}\}_{j,b}$ form an orthonormal basis of finite-energy
+real sequences.
+Moreover, the Haar wavelet is the shortest function of compact support such that the family
+$\{\boldsymbol{\psi_{j,b}}\}_{j,b}$ satisfies this orthonormality property.
+On the flip side, it has a poor localization in the Fourier domain, owing to its sharp discontinuities.
+
+It must be noted that, unlike the pseudo-continuous variables of time and frequency,
+the octave variable is intrinsically dicrete, and has no more than 8 coefficients in
+the audible spectrum.
+Therefore, we choose to favor compact support over regularity, \ie Haar over
+Daubechies or Gabor wavelets.
+
+The wavelet transform of some finite-energy sequence
+$\boldsymbol{x} \in \ell^2(\mathbb{Z})$ is defined by
+$\mathbf{W} \boldsymbol{x}[j, b]
+= \langle \boldsymbol{x} \vert \boldsymbol{\psi_{j,b}} \rangle$.
+Since $\boldsymbol{x}[u]$ has a finite length $K = 2^J$,
+this decomposition is informative only for indices $(j, b)$
+such that $j \leq J$ and $2^j b \leq K$, \ie $b\leq2^{J-j}$.
+The number of coefficients in the Haar wavelet transform of $\boldsymbol{x}[u]$ is thus equal to
+$\sum_{j =1}^{J} 2^{J-j} = 2^J - 1$. For the wavelet representation to
+preserve energy and allow signal reconstruction, a residual term
+\begin{equation}
+\boldsymbol{\mathbf{A}_J} \boldsymbol{x}
+= \boldsymbol{x}[0] -
+\sum_{j,b}
+\langle \boldsymbol{x} \vert \boldsymbol{\psi_{j,b}} \rangle \boldsymbol{\psi_{j,b}}[0]
+= \sum_{u<K} \boldsymbol{x}[u]
+\label{eq:lowpass-term}
+\end{equation}
+must be appended to the wavelet coefficients.
+Observe that $\boldsymbol{\mathbf{A}_J}  \boldsymbol{x}$
+computes a delocalized average of all signal coefficients,
+which can equivalently be formulated as an inner product with the constant
+function $\boldsymbol{\phi}[u] = 2^{-J/2}$ over the support $\llbracket 0 ; K \llbracket$.
+Henceforth, it corresponds to the traditional chroma representation, where spectrogram bands
+of the same pitch class $q$ are summed across all $K$ octaves.
+
+Since the wavelet representation amounts to $K$ inner products in $\mathbb{R}^K$,
+its computational complexity is $\Theta(K^2)$ if implemented as a matrix-vector product.
+Fast Fourier Transforms (FFT) would bring the complexity to
+$\Theta{(K (\log_2 K)^2)}$.
+To improve this, \cite{mallat1989theory} develops a recursive scheme, called
+\emph{multiresolution pyramid}, which operates as a cascade
+of convolutions with some pair of quadrature mirror filters
+$(\boldsymbol{g}, \boldsymbol{h})$ and progressive subsamplings by a factor of two.
+Since the number of operations is halved after each subsampling, the total
+complexity of the multiresolution pyramid is $K + \frac{K}{2} + \cdots + 1 = \Theta(K)$.
+
+Let us denote by $\boldsymbol{g}_{\downarrow 2}$ and
+$\boldsymbol{h}_{\downarrow 2}$ the corresponding operators of subsampled
+convolutions, and by $(\boldsymbol{g_{\downarrow 2}})^j$ the $j$-fold composition
+of operators $\boldsymbol{g_{\downarrow 2}}$.
+The wavelet transform rewrites as
+\begin{equation}
+\mathbf{W}\boldsymbol{x}[j,b] =
+\left(
+\boldsymbol{h_{\downarrow 2}} \circ
+(\boldsymbol{g_{\downarrow 2}})^{(j-1)} \boldsymbol{x}
+\right)[b],
+\end{equation}
+while the fully delocalized chroma representation rewrites as
+$\boldsymbol{\mathbf{A}_J} \boldsymbol{x} =
+(\boldsymbol{g_{\downarrow 2}})^J \boldsymbol{x}$.
+A flowchart of the operations involved in the wavelet transform is shown on
+Figure \ref{fig:wavelet-flowchart}.
+We refer to chapter 7 of \cite{mallat2008wavelet}
+for further insight.
+
+\begin{figure}[t]
+\begin{center}
+\includegraphics[width=9cm]{figs/wavelet_scheme.eps}
+\caption{Discrete wavelet transform of a signal of length $K=8$, as implemented with a multiresolution pyramid scheme. See text for details.}
+\label{fig:wavelet-flowchart}
+\end{center}
+\end{figure}
+
+Since the low-pass filter $\boldsymbol{\phi}$ and the family of
+wavelets $\boldsymbol{\psi_{j,b}}$'s form an orthonormal basis of $\mathbb{R}^K$,
+any two signals $\boldsymbol{x}[u]$ and $\boldsymbol{y}[u]$ have the same
+Euclidean distance in the wavelet domain as in the signal domain.
+This isometry property implies that the wavelet representation is not
+invariant to translation per se.
+Therefore, the wavelet-based chroma features are extracted by taking
+the absolute value of each wavelet coefficient, hence contracting
+Euclidean distances in the wavelet domain.
+Most importantly,
+the distance $\Vert \mathbf{W}\boldsymbol{x} - \mathbf{W}\boldsymbol{y} \Vert$
+is all the more reduced by the absolute value nonlinearity
+that $\boldsymbol{x}$ and $\boldsymbol{y}$ are approximate
+translates of each other.
+
+In the case of Haar wavelets, the low-pass filtering $(\boldsymbol{x} \ast \boldsymbol{g})$
+consists of the sum between adjacent coefficients, whereas the high-pass filtering
+$(\boldsymbol{x} \ast \boldsymbol{h})$ is the corresponding difference, up to a
+renormalization constant:
+\begin{IEEEeqnarray}{rCl}
+(\boldsymbol{x} \ast \boldsymbol{g})[2b]
+& = &
+\frac{ \boldsymbol{x}[2b+1] + \boldsymbol{x}[2b]}{\sqrt{2}}$, and$
+\nonumber \\
+(\boldsymbol{x} \ast \boldsymbol{h})[2b]
+&= &
+\frac{ \boldsymbol{x}[2b+1] - \boldsymbol{x}[2b]}{\sqrt{2}}.
+\IEEEeqnarraynumspace
+\end{IEEEeqnarray}
+
+Besides its small computational complexity, the multiresolution pyramid
+scheme has the advantage of being achievable without allocating memory.
+Indeed, at every scale $j$, the pair
+$(\boldsymbol{g_{\downarrow 2}}, \boldsymbol{h_{\downarrow 2}})$
+has $2^{-j} K$ inputs and $2^{-j} K$ outputs, of which one half are
+subsequently mutated.
+By performing the sums and differences in place, and deferring the
+renormalization to the end of the flowchart, the time taken by the
+wavelet transform procedure remains negligible in front
+of the time taken by the constant-Q transform.
+
+\begin{table}
+	\begin{center}
+	\begin{tabular}{|c|cc|}
+		\hline
+		Haar transform implementation & operations & memory \\
+		\hline
+		Matrix-vector product & $\Theta(K^2)$ & $\Theta(K)$ \\
+		Fast Fourier transforms & $\Theta(K (\log K)^2)$ & $\Theta(K)$ \\
+		Multiresolution pyramid & $\Theta(K)$ & $\Theta(1)$ \\
+		\hline		
+	\end{tabular}
+	\end{center}
+	\caption{
+	Computational complexity and memory usage of various implementations
+	of the Haar wavelet transform, for a one-dimensional signal of length $K$.
+	See text for details.
+	\label{table:wavelet-complexities}}
+\end{table}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Deep Haar Scattering}
+\label{sec:deephaar}
+
+The wavelet modulus operator decomposes the variations of a signal at
+different scales $2^j$ while keeping the finest localization possible $b$.
+As such, the coefficient $\vert \mathbf{W} \boldsymbol{x}[j, b] \vert$
+only bears a limited amount of invariance, which is of the order
+of $2^j$.
+In this section, we iterate the scattering operator over increasing scales,
+until reaching some maximal scale $K=2^J$.
+We interpret the scattering cascade in terms of invariance and discriminability,
+and provide a fast implementation with $\Theta(K \log K)$ operations
+and $\Theta(1)$ allocated memory.
+
+Most of the intervallic content of chords in tonal music consists of perfect fifths,
+perfect fourths, major thirds and minor thirds.
+Quite strikingly, these intervals are also naturally present in harmonic series,
+as the log-frequency distances between the first partials.
+By combining the two previous propositions, we deduce that
+the components of a typical chord overlap at high frequencies,
+hence producing an interference pattern which reveals their relative positions.
+
+In our introductory example, denoting by $f_0$ the root frequency of \Amin,
+$f_0$ interferes with its perfect fifth \fifthE at the frequency $3 f_0$.
+In contrast, in its third inversion labeled as \Csix, the interference
+between \rootA and \fifthE only starts at $6 f_0$, \ie one octave higher.
+Under the same instrumentation, this inversion yields a deformation of the
+octave vector corresponding to \fifthE, which consists of the frequency bins
+of the form $2^u \times 3 f_0$ for integer $u \in \mathbb{Z}$.
+More generally, we argue that the characterization of complex interference patterns
+in polyphonic music is a major challenge in large-vocabulary chord estimation,
+as it provides a tool for disambiguating chord inversions in spite of global
+invariance to octave transposition.
+
+In this regard, the wavelet modulus operator is neither fully invariant to
+octave transposition, nor does it retrieve the structure of musical chords beyond
+binary interactions between overlapping partials.
+Nonetheless, both of these desired properties can be progressively improved
+by cascading the wavelet modulus operator over increasing scales, until
+reaching the full support $2^J$ of the original signal $\boldsymbol{x}[u]$ ;
+a nonlinear decomposition known as the scattering transform \cite{mallat2012group}.
+
+Considering that the Haar wavelet is analogous to a linear interferometer,
+the scattering transform is a recursive interferometric representation,
+whose recursion depth $m$ varies according to the number of
+modulus nonlinearities encountered before reaching the scale $2^J$.
+Whereas wavelet coefficients $\boldsymbol{Wx}[j,b]$ are indexed by a scale
+parameter $j$ and a translation parameter $b$, scattering coefficients are
+indexed by sequences of scale parameters $(j_1 \ldots j_m)$ called
+\emph{paths}, and do not need a translation parameter since they are
+fully delocalized.
+The increasing scales in a scattering path correspond to the cumulative
+sum of integers $j_1$ to $j_m$.
+Therefore, the full sum $\sum_{n=1}^{m} j_n$ should be lower or equal to $J$.
+If it is strictly lower than $J$, a low-pass filtering with $\boldsymbol{\phi}$ is
+performed after the final wavelet modulus layer.
+
+Scattering has been employed as a feature extraction stage for many problems in
+signal classification.
+Initially defined as operating solely over the time dimension, it has recently been
+generalized to multi-variable transforms in the time-frequency domain,
+including log-frequency and octave \cite{lostanlen2015wavelet}.
+In addition, \cite{cheng2014deep} applies Haar scattering to
+the unsupervised learning of unknown graph connectivities.
+
+Because it results from the alternate composition of unitary and contractive operators,
+it follows immediately that the scattering transform is itself unitary and contractive.
+Moreover, \cite{mallat2012group} has proven that it is invariant to translation and stable to the
+action of small deformations.
+Along the octave variable $u$, translation
+corresponds to octave transposition, while small deformations correspond to
+variations in spectral envelope, such as those induced by a change in
+instrumentation or by polyphonic interference.
+
+\begin{figure}[t]
+\begin{center}
+\includegraphics[width=9cm]{figs/scattering_scheme.eps}
+\caption{Deep scattering transform of a signal of length $K=8$, as implemented with a multiresolution pyramid scheme. See text for details.}
+\label{fig:haar-scattering}
+\end{center}
+\end{figure}
+
+\begin{table}
+	\begin{center}
+	\begin{tabular}{|c|cc|}
+		\hline
+		Haar scattering implementation & operations & memory \\
+		\hline
+		Matrix-vector product & $\Theta(K^3)$ & $\Theta(K^2)$ \\
+		Fast Fourier transforms & $\Theta(K^2 (\log K)^2)$ & $\Theta(K^2)$ \\
+		Multiresolution pyramid & $\Theta(K \log K)$ & $\Theta(1)$ \\
+		\hline		
+	\end{tabular}
+	\end{center}
+	\protect\caption{Computational complexity and memory usage of various implementations
+	of the deep Haar scattering transform, for a one-dimensional signal
+	of length $K$. See text for details.
+	\label{table:scattering-complexities}}
+\end{table}
+
+Like the orthogonal wavelet transform, the scattering transform benefits
+from a multiresolution pyramid recursive scheme.
+By decomposing $\boldsymbol{x}[u]$ with subsampled quadrature mirror filters 
+$\boldsymbol{g_{\downarrow 2}}[u]$ (low-pass) and
+$\boldsymbol{h_{\downarrow 2}}[u]$ (high-pass)
+over a full binary tree, and applying absolute value nonlinearity after each
+high-pass filtering, all $K$ scattering coefficients are obtained after
+$\Theta(K \log K)$ operations and without allocating memory.
+A flowchart of the operations involved in the deep scattering transform is shown
+in Figure \ref{fig:haar-scattering}, and computational complexities are summarized in Table \ref{table:scattering-complexities}.
+
+The scattering coefficient of path $(j_1, \ldots, j_m)$ is given in closed form by the
+following equation:
+\begin{IEEEeqnarray}{rCl}
+\IEEEeqnarraymulticol{1}{l}{\boldsymbol{\mathbf{S}_J} \boldsymbol{x}[j_1, \cdots, j_{m}]}
+\nonumber \\
+\IEEEeqnarraymulticol{1}{l}{\quad =
+(\boldsymbol{g_{\downarrow 2}})^{\left(J - \sum_{n=1}^{m} \limits j_n \right)}
+\Circ_{ \sum_{n=1}^{m} \limits j_n \leq J  }
+\left \vert
+\boldsymbol{h_{\downarrow 2}} \circ
+\left( \boldsymbol{g_{\downarrow 2}} \right)^{(j_{n}-1)}
+\right \vert
+\boldsymbol{x}},
+\IEEEeqnarraynumspace
+\end{IEEEeqnarray}
+where the circle symbol represents functional composition.
+Interestingly, the case $m=0$ boils down to the sum across octaves
+$\boldsymbol{\mathbf{A}_J}$
+already introduced in Equation \ref{eq:lowpass-term}, \ie the chroma representation.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Representation Properties}
+\label{sec:representation}
+
+\begin{figure}
+    \begin{center}
+        \setlength{\unitlength}{1cm}
+        \begin{picture}(8.5,8.3)
+        \put(-0.5,-1.3){\includegraphics[width=9.3cm]{figs/features_gray.eps}}
+        \end{picture}
+    \end{center}
+    \protect\caption{Features for chords in Figure 1 for $K=4$: multiband chroma (top), Haar wavelet transform (middle), deep Haar scattering (bottom). See text for details. \label{fig:features}}
+\end{figure}
+
+\begin{table}
+	\begin{center}
+	\begin{tabular} {| c | c | r |}
+	\hline
+	$K$ & Mode & Distance \\
+	\hline
+	4 & Multiband & 0.5653 \\
+	& Wavelet & 0.5920 \\
+	& Scattering & 0.5551 \\
+	\hline
+	8 & Multiband & 0.5937 \\
+	& Wavelet & 0.6419 \\
+	& Scattering & \textbf{0.6681} \\
+
+	\hline
+	\end{tabular}
+	\end{center}
+	%\protect
+	\caption{Ratio between d($\chi_1,\chi_3$) and d($\chi_1,\chi_2$), where the bigger ratio separates $\chi_1$ and $\chi_3$ while bringing $\chi_1$ and $\chi_2$ closer in the feature space for the given feature extraction method and $K$.}
+	\label{table:distances}
+\end{table}
+
+The example chords discussed at the beginning of this paper in Figure \ref{fig:sheet-music} ---
+\Amin ($\chi_1$), \Amin up one octave ($\chi_2$), and \Csix ($\chi_3$) ---  are played one after another on a piano and analyzed. Figure \ref{fig:features} shows all three features for this isolated chord sequence at $K=4$ for visual simplicity. 
+
+In seeking to separate the feature profile of the \Csix chord from the other two, we calculate the Euclidean distance between vectors at temporal frames in the middle of each chord activation. By maximizing the ratio $d(\chi_1,\chi_3)/d(\chi_1,\chi_2)$, the two \Amin chords are closer in the feature space while the \Amin and \Csix are further.
+
+Table \ref{table:distances} shows these distance ratios for our example chord progression. At scale $K=4$ the wavelet transform wins, while scale $K=8$ provides for higher disambiguation overall, with wavelet scattering separating $\chi_1$ and $\chi_3$ the most, further motivating the use of wavelet transforms for disambiguation of difficult chords with inversions.
+
+

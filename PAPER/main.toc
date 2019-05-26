@@ -1,0 +1,17 @@
+\contentsline {section}{\numberline {1}Introduction}{6}
+\contentsline {section}{\numberline {2}Scattering Transform}{8}
+\contentsline {section}{\numberline {3}Chroma Representations}{9}
+\contentsline {subsection}{\numberline {3.1}Multiband Chroma}{9}
+\contentsline {section}{\numberline {4}Haar Wavelets In Chroma Space}{11}
+\contentsline {subsection}{\numberline {4.1}Haar Wavelet Transform}{11}
+\contentsline {subsection}{\numberline {4.2}Deep Haar Scattering}{14}
+\contentsline {subsection}{\numberline {4.3}Representation Properties}{16}
+\contentsline {section}{\numberline {5}Automatic Chord Estimation}{18}
+\contentsline {subsection}{\numberline {5.1}Experimental Setup and Evaluation}{18}
+\contentsline {subsection}{\numberline {5.2}Results}{18}
+\contentsline {section}{\numberline {6}Conclusions}{23}
+\contentsline {subsection}{\numberline {6.1}This is a subsection}{23}
+\contentsline {subsubsection}{\numberline {6.1.1}This is a subsubsection}{23}
+\contentsline {section}{Bibliography}{24}
+\contentsline {section}{\numberline {A}Here is an Appendix}{24}
+\contentsline {section}{\numberline {B}Here is another Appendix}{25}

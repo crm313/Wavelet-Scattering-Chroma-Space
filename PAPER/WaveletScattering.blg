@@ -1,0 +1,60 @@
+This is BibTeX, Version 0.99c (Web2C 7.5.7)
+The top-level auxiliary file: WaveletScattering.aux
+A level-1 auxiliary file: abstract.aux
+A level-1 auxiliary file: acknowledgments.aux
+A level-1 auxiliary file: contents.aux
+A level-1 auxiliary file: introduction.aux
+A level-1 auxiliary file: chordestimation.aux
+A level-1 auxiliary file: scattering.aux
+A level-1 auxiliary file: haarscattering.aux
+A level-1 auxiliary file: experiment.aux
+A level-1 auxiliary file: results.aux
+A level-1 auxiliary file: analysis.aux
+A level-1 auxiliary file: conclusions.aux
+A level-1 auxiliary file: bibliography.aux
+The style file: apalike.bst
+Database file #1: WaveletScattering.bib
+Warning--empty year in harte2005symbolic
+Warning--empty booktitle in harte2005symbolic
+You've used 35 entries,
+            1935 wiz_defined-function locations,
+            694 strings with 9914 characters,
+and the built_in function-call counts, 13918 in all, are:
+= -- 1365
+> -- 495
+< -- 31
++ -- 176
+- -- 160
+* -- 1129
+:= -- 2357
+add.period$ -- 106
+call.type$ -- 35
+change.case$ -- 252
+chr.to.int$ -- 35
+cite$ -- 37
+duplicate$ -- 579
+empty$ -- 1063
+format.name$ -- 223
+if$ -- 2801
+int.to.chr$ -- 1
+int.to.str$ -- 0
+missing$ -- 35
+newline$ -- 176
+num.names$ -- 105
+pop$ -- 263
+preamble$ -- 1
+purify$ -- 255
+quote$ -- 0
+skip$ -- 399
+stack$ -- 0
+substring$ -- 994
+swap$ -- 74
+text.length$ -- 7
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 206
+warning$ -- 2
+while$ -- 109
+width$ -- 0
+write$ -- 447
+(There were 2 warnings)

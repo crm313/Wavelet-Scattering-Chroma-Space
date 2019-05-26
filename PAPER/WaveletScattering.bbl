@@ -1,0 +1,212 @@
+\begin{thebibliography}{}
+
+\bibitem[And{\'e}n et~al., 2015]{anden2015joint}
+And{\'e}n, J., Lostanlen, V., and Mallat, S. (2015).
+\newblock Joint time-frequency scattering for audio classification.
+\newblock In {\em Machine Learning for Signal Processing (MLSP), 2015 IEEE 25th
+  International Workshop on}, pages 1--6. IEEE.
+
+\bibitem[And{\'e}n and Mallat, 2014]{anden2014deep}
+And{\'e}n, J. and Mallat, S. (2014).
+\newblock Deep scattering spectrum.
+\newblock {\em IEEE Transactions on Signal Processing}, 62:4114--4128.
+
+\bibitem[Bello and Pickens, 2005]{bello2005robust}
+Bello, J. and Pickens, J. (2005).
+\newblock A robust mid-level representation for harmonic content in music
+  signals.
+
+\bibitem[Bruna and Mallat, 2011]{bruna2011classification}
+Bruna, J. and Mallat, S. (2011).
+\newblock Classification with invariant scattering representations.
+\newblock In {\em IVMSP Workshop, 2011 IEEE 10th}, pages 99--104. IEEE.
+
+\bibitem[Burgoyne et~al., 2011]{burgoyne2011}
+Burgoyne, J.~A., Wild, J., and Fujinaga, I. (2011).
+\newblock An expert ground-truth set for audio chord recognition and music
+  analysis.
+\newblock In {\em Proc. ISMIR}.
+
+\bibitem[Cheng et~al., 2014]{cheng2014deep}
+Cheng, X., Chen, X., and Mallat, S. (2014).
+\newblock {Unsupervised deep Haar scattering on graphs}.
+\newblock In {\em Proc. NIPS}.
+
+\bibitem[Chi et~al., 2005]{chi2005multiresolution}
+Chi, T., Ru, P., and Shamma, S.~A. (2005).
+\newblock Multiresolution spectrotemporal analysis of complex sounds.
+\newblock {\em The Journal of the Acoustical Society of America},
+  118(2):887--906.
+
+\bibitem[Cho, 2013]{chothesis}
+Cho, T. (2013).
+\newblock {\em Improved Techniques For Automatic Chord Recognition From Music
+  Audio Signals}.
+\newblock PhD thesis, New York University.
+
+\bibitem[Cho and Bello, 2013]{cho2013mirex}
+Cho, T. and Bello, J.~P. (2013).
+\newblock Large vocabulary chord recognition system using multi-band features
+  and a multi-stream hmm.
+\newblock In {\em Proc. MIREX}.
+
+\bibitem[Cho and Bello, 2014]{cho2014on}
+Cho, T. and Bello, J.~P. (2014).
+\newblock On the relative importance of individual components of chord
+  recognition systems.
+\newblock {\em IEEE/ACM Trans. Audio, Speech and Lang. Proc.}, 22(2):477--492.
+
+\bibitem[Chudacek et~al., 2014]{chudacek2014scattering}
+Chudacek, V., And{\'e}n, J., Mallat, S., Abry, P., and Doret, M. (2014).
+\newblock Scattering transform for intrapartum fetal heart rate variability
+  fractal analysis: A case-control study.
+\newblock {\em Biomedical Engineering, IEEE Transactions on}, 61(4):1100--1108.
+
+\bibitem[Daubechies, 1990]{daubechies}
+Daubechies, I. (1990).
+\newblock The wavelet transform, time-frequency localization and signal
+  analysis.
+\newblock {\em Information Theory, IEEE Transactions on}, 36(5):961--1005.
+
+\bibitem[Ellis and Poliner, 2007]{ellis2007identifying}
+Ellis, D. P.~W. and Poliner, G.~E. (2007).
+\newblock Identifying "cover songs" with chroma features and dynamic
+  programming beat tracking.
+\newblock In {\em Proc. ICASSP}.
+
+\bibitem[Fujishima, 1999]{fujishima1999realtime}
+Fujishima, T. (1999).
+\newblock Realtime chord recognition of musical sound: A system using common
+  lisp music.
+\newblock In {\em Proc. ICMC}.
+
+\bibitem[Gabor, 1946]{gabor}
+Gabor, D. (1946).
+\newblock Theory of communication. part 1: The analysis of information.
+\newblock {\em Electrical Engineers - Part III: Radio and Communication
+  Engineering, Journal of the Institution of}, 93(26):429--441.
+
+\bibitem[Grosche and Muller, 2011]{grosche2011muller}
+Grosche, P. and Muller, M. (2011).
+\newblock Extracting predominant local pulse information from music recordings.
+\newblock {\em IEEE Transactions on Audio, Speech, and Language Processing},
+  19(6):1688--1701.
+
+\bibitem[Harte et~al., ]{harte2005symbolic}
+Harte, C., Sandler, M.~B., Abdallah, S.~A., and G{\'o}mez, E.
+\newblock Symbolic representation of musical chords: A proposed syntax for text
+  annotations.
+
+\bibitem[Jacod and Protter, 2004]{probabilityEssentials}
+Jacod, J. and Protter, P. (2004).
+\newblock {\em Probability Essentials}.
+\newblock Springer-Verlag, Berlin.
+
+\bibitem[Lee and Slaney, 2006]{lee2006automatic}
+Lee, K. and Slaney, M. (2006).
+\newblock Automatic chord recognition from audio using a supervised hmm trained
+  with audio-from-symbolic data.
+\newblock In {\em Proceedings of the 1st ACM Workshop on Audio and Music
+  Computing Multimedia}, AMCMM '06, pages 11--20, New York, NY, USA. ACM.
+
+\bibitem[Lostanlen and Mallat, 2015]{lostanlen2015wavelet}
+Lostanlen, V. and Mallat, S. (2015).
+\newblock Wavelet scattering on the pitch spiral.
+\newblock In {\em Proc. of the 18th Int. Conference on Digital Audio Effects
+  (DAFx-15)}.
+
+\bibitem[Mallat, 1989]{mallat1989theory}
+Mallat, S. (1989).
+\newblock A theory for multiresolution signal decomposition: the wavelet
+  representation.
+\newblock {\em Pattern Analysis and Machine Intelligence, IEEE Transactions
+  on}, 11(7):674--693.
+
+\bibitem[Mallat, 2008]{mallat2008wavelet}
+Mallat, S. (2008).
+\newblock {\em A Wavelet Tour of Signal Processing, 3\textsuperscript{rd}
+  edition: The Sparse Way}.
+\newblock Academic press.
+
+\bibitem[Mallat, 2012]{mallat2012group}
+Mallat, S. (2012).
+\newblock Group invariant scattering.
+\newblock {\em Communications on Pure and Applied Mathematics},
+  65(10):1331--1398.
+
+\bibitem[Mauch and Dixon, 2010]{mauch2010approximate}
+Mauch, M. and Dixon, S. (2010).
+\newblock Approximate note transcription for the improved identification of
+  difficult chords.
+\newblock In {\em Proc. ISMIR}.
+
+\bibitem[Mauch et~al., 2012]{mauch2012integrating}
+Mauch, M., Fujihara, H., and Goto, M. (2012).
+\newblock Integrating additional chord information into hmm-based
+  lyrics-to-audio alignment.
+\newblock {\em IEEE TASLP}, 20(1):200--210.
+
+\bibitem[McVicar et~al., 2014]{mcvicar2014automatic}
+McVicar, M., Santos-Rodr�guez, R., Ni, Y., and Bie, T.~D. (2014).
+\newblock Automatic chord estimation from audio: A review of the state of the
+  art.
+\newblock {\em IEEE/ACM Transactions on Audio, Speech, and Language
+  Processing}, 22(2):556--575.
+
+\bibitem[Moon, 1996]{moon1996expectation}
+Moon, T.~K. (1996).
+\newblock The expectation-maximization algorithm.
+\newblock {\em IEEE Signal Processing Magazine}, 13(6):47--60.
+
+\bibitem[Papadopoulos and Peeters, 2007]{papadopoulos2007large}
+Papadopoulos, H. and Peeters, G. (2007).
+\newblock Large-scale study of chord estimation algorithms based on chroma
+  representation and hmm.
+\newblock In {\em Content-Based Multimedia Indexing, 2007. CBMI '07.
+  International Workshop on}, pages 53--60.
+
+\bibitem[P{\'e}rez-Sancho et~al., 2009]{perez2009genre}
+P{\'e}rez-Sancho, C., Rizo, D., and Inesta, J.~M. (2009).
+\newblock Genre classification using chords and stochastic language models.
+\newblock {\em Connection science}, 21(2-3):145--159.
+
+\bibitem[Rabiner, 1989]{rabiner1989tutorial}
+Rabiner, L.~R. (1989).
+\newblock A tutorial on hidden markov models and selected applications in
+  speech recognition.
+\newblock {\em Proceedings of the IEEE}, 77(2):257--286.
+
+\bibitem[Raffel et~al., 2014]{raffel2014mir}
+Raffel, C., McFee, B., Humphrey, E.~J., Salamon, J., Nieto, O., Liang, D., and
+  Ellis, D. P.~W. (2014).
+\newblock mir\_eval: A transparent implementation of common mir metrics.
+\newblock In {\em ISMIR}.
+
+\bibitem[Risset, 1969]{risset1969pitch}
+Risset, J.~C. (1969).
+\newblock Pitch control and pitch paradoxes demonstrated with
+  computer‐synthesized sounds.
+\newblock {\em The Journal of the Acoustical Society of America},
+  46(1A):88--88.
+
+\bibitem[Sheh and Ellis, 2003]{sheh2003chord}
+Sheh, A. and Ellis, D.~P. (2003).
+\newblock Chord segmentation and recognition using em-trained hidden markov
+  models.
+\newblock {\em ISMIR 2003}, pages 185--191.
+
+\bibitem[Thompson and Atlas, 2003]{thompson2003nonuniform}
+Thompson, J.~K. and Atlas, L.~E. (2003).
+\newblock A non-uniform modulation transform for audio coding with increased
+  time resolution.
+\newblock In {\em Acoustics, Speech, and Signal Processing, 2003. Proceedings.
+  (ICASSP '03). 2003 IEEE International Conference on}, volume~5, pages
+  V--397--400 vol.5.
+
+\bibitem[Warren et~al., 2003]{warren2003separating}
+Warren, J.~D., Uppenkamp, S., Patterson, R.~D., and Griffiths, T.~D. (2003).
+\newblock Separating pitch chroma and pitch height in the human brain.
+\newblock {\em Proceedings of the National Academy of Sciences},
+  100(17):10038--10042.
+
+\end{thebibliography}

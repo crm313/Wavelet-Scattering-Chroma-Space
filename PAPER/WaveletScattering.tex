@@ -1,0 +1,167 @@
+ % WaveletScattering.tex
+ % Chris Miller - crm313@nyu.edu
+ % main body of "Wavelet Scattering in Chroma Space"
+ %
+ 
+
+\documentclass[12pt]{extarticle}
+\usepackage[margin=1in]{geometry} 
+\geometry{a4paper}
+\usepackage[parfill]{parskip}    % Activate to begin paragraphs with an empty line rather than an indent
+\linespread{1.4} 
+
+\usepackage{times}
+\usepackage{epsfig}
+\usepackage{graphicx}
+\usepackage{subfig}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{fancyhdr}
+\usepackage{color}
+\usepackage{cite}
+\usepackage{dsfont}
+
+
+\usepackage{epstopdf} % convert eps to pdf
+
+\usepackage{bm}
+\usepackage{stmaryrd}
+\usepackage{xspace}
+\usepackage{IEEEtrantools}
+\newcommand*{\eg}{e.g.\@\xspace}
+\newcommand*{\ie}{i.e.\@\xspace}
+\newcommand*{\etal}{et al.\@\xspace}
+
+\makeatletter
+\DeclareRobustCommand{\Circ}{%
+  \mathop{\vphantom{\sum}\mathpalette\Circ@\relax}\slimits@
+}
+
+\newcommand{\Circ@}[2]{%
+  \vcenter{%
+    \sbox\z@{$#1\sum$}%
+    \hbox{\resizebox{.9\dimexpr\ht\z@+\dp\z@}{!}{$\m@th\circ$}}%
+  }%
+}
+\makeatother
+
+\newcommand{\Amin}{\texttt{A:min7}\@\xspace}
+\newcommand{\Csix}{\texttt{C:maj6}\@\xspace}
+\newcommand{\pcset}{\texttt{\{C,E,G,A\}}\@\xspace}
+\newcommand{\rootA}{\texttt{A}\@\xspace}
+\newcommand{\fifthE}{\texttt{E}\@\xspace}
+\newcommand{\maj}{\texttt{maj}\@\xspace}
+\newcommand{\minor}{\texttt{min}\@\xspace}
+\newcommand{\minseven}{\texttt{min7}\@\xspace}
+\newcommand{\7}{\texttt{7}\@\xspace}
+\newcommand{\N}{\texttt{N}\@\xspace}
+\newcommand{\majseven}{\texttt{maj7}\@\xspace}
+\newcommand{\susfour}{\texttt{sus4}\@\xspace}
+\newcommand{\majsix}{\texttt{maj6}\@\xspace}
+\newcommand{\minsix}{\texttt{min6}\@\xspace}
+\newcommand{\sustwo}{\texttt{sus2}\@\xspace}
+\newcommand{\diminished}{\texttt{dim}\@\xspace}
+\newcommand{\augmented}{\texttt{aug}\@\xspace}
+\newcommand{\hdimseven}{\texttt{hdim7}\@\xspace}
+\newcommand{\dimseven}{\texttt{dim7}\@\xspace}
+
+\newcommand{\mirex}{mirex}
+\newcommand{\tetradsinv}{tetrads\_inv}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% define an Acknowledgements page format
+\makeatletter
+\newcommand\ackname{Acknowledgements}
+\if@titlepage
+  \newenvironment{acknowledgements}{%
+      \titlepage
+      \null\vfil
+      \@beginparpenalty\@lowpenalty
+      \begin{center}%
+        \bfseries \ackname
+        \@endparpenalty\@M
+      \end{center}}%
+     {\par\vfil\null\endtitlepage}
+\else
+  \newenvironment{acknowledgements}{%
+      \if@twocolumn
+        \section*{\abstractname}%
+      \else
+        \small
+        \begin{center}%
+          {\bfseries \ackname\vspace{-.5em}\vspace{\z@}}%
+        \end{center}%
+        \quotation
+      \fi}
+      {\if@twocolumn\else\endquotation\fi}
+\fi
+\makeatother
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+% Title and Author
+\author{Chris Miller} 
+\title{Wavelet Scattering In Chroma Space}
+\date{}
+\maketitle
+
+\vspace{75mm}
+
+\begin{center}
+Submitted in partial fulfillment of the requirements for the \\
+Master of Music in Music Technology \\
+in the Department of Music and Performing Arts Professions \\
+Steinhardt School \\
+New York University \\
+
+\vspace{10mm}
+
+Advisor: Juan P. Bello \\
+Reader: Alex Ruthmann\\
+
+\vspace{10mm}
+\date{\today}
+\end{center}
+\thispagestyle{empty}
+
+% sum of likelihoods vs. geometric mean for fusion?
+% look at likelihood estimation profiles and see if one voter is always 
+
+% we can make an assumption of independence of wavelet bands - use all together? too many rows… 8 * 12 = 96
+% random forest handles sparsity well
+
+% geometric mean of output (4, 8 models)
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Included sections
+% This document is single-sided
+\include{abstract}
+\include{acknowledgments}
+\include{contents}
+
+\include{introduction}
+\include{chordestimation}
+\include{scattering}
+\include{haarscattering}
+\include{experiment}
+\include{results}
+\include{analysis}
+\include{conclusions}
+\include{bibliography}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% References
+
+%\bibliography{WaveletScattering}
+%% \include{bibliography}
+%\bibliographystyle{apalike}
+%\addcontentsline{toc}{section}{Bibliography}
+
+%\appendix 
+%\include{appendix}
+
+\end{document}

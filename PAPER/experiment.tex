@@ -1,0 +1,28 @@
+  % experiment.tex
+ % Chris Miller - crm313@nyu.edu
+ %
+ 
+ \section{Experimental Setup and Evaluation}
+ \label{sec:experiment}
+
+In all experiments, a training set consisting of 108 songs from the Beatles
+discography, 99 RWC pop songs, 224 songs from the Billboard dataset, and 20 Queen songs was used for a total of 451 songs.
+The testing dataset comprised of 65 songs from the Beatles and uspop datasets that were not part
+of the training set and that contained a sufficient number of examples of each chord quality. 
+Both the training and testing set of songs are kept constant across all experiments.
+	
+We consider a large vocabulary of chords with 13 different qualities:
+major, minor, minor $\textrm{7}^\textrm{th}$, dominant $\textrm{7}^\textrm{th}$,
+major $\textrm{7}^\textrm{th}$, suspended $\textrm{4}^\textrm{th}$,
+major $\textrm{6}^\textrm{th}$, minor $\textrm{6}^\textrm{th}$, suspended $\textrm{2}^\textrm{nd}$,
+diminished triad, augmented triad, half-diminished $\textrm{7}^\textrm{th}$,
+diminished $\textrm{7}^\textrm{th}$ --- at all 12 roots, in addition to the null label \texttt{N}.
+The total number of classes in the extended vocabulary is thus equal to
+$12 \times 13 + 1 = 157$.
+For each experiment, a chord model and Viterbi transition probability matrix are generated from the  training set with the band $K$ equivalent to the number of bands in the multiband chroma representation and the maximum wavelet scale $K = 2^J$ in the wavelet and scattering representations (\ie the number of wavelet coefficients).
+
+After generating estimated chord labels for each song in the test set, Python scripts were written by the author to evaluate the results through the use of the mir\_eval package \cite{raffel2014mir}.
+As per \cite{raffel2014mir}, there is ``no single right way to compare two sequences of chord labels,"
+and mir\_eval offers a broad range of metrics for automatic chord estimation.
+In this experiment we focus on two of these metrics: \mirex, which ``considers a chord
+correct if it shares at least three pitch classes in common" \cite{raffel2014mir}, and \tetradsinv, which is much stricter and evaluates chord accuracy over the entire quality in closed voicing while taking inversions notated in the reference labeling into account.

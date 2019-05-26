@@ -1,0 +1,109 @@
+% background.tex
+% 
+% LaTeX document from NYU music technology master's thesis
+
+\section{Scattering Transform}
+\label{sec:scattering}
+
+Despite their success, the multiband chroma features do not comply with the assumption of statistical independence of the K-stream HMM, owing to the overlap between Gaussian windows. Further, they remove the sensitivity to pitch inversion and invariance to octave transposition inherent in the traditional chroma representation by aggregating neighboring octaves. Scattering wavelets across octaves restores these properties. In this section, we review basic properties of the wavelet transform, detail the scattering transform, and discuss scattering for pitched and harmonic sounds. 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Wavelet Transform}
+\label{sec:wavelettransform}
+
+A wavelet transform is constructed through the dilation and translation of a mother wavelet $\psi(t) \in \mathbf{L^2} (\mathbb{R}^d)$ \cite{mallat2012group} \cite{daubechies}. This defines a basis of wavelets $\psi_{\gamma}(t)$ which, in the frequency-domain, are equivalent to a bank of bandpass filters at center frequencies $\lambda \in \Lambda$. With center frequencies $\lambda$ corresponding to twelve-tone pitch, \ie $\lambda = 2^{\gamma/Q}$ for integers $\gamma$ where $Q = 12$ wavelets per octave, the wavelet basis is the same as a constant-Q filter bank (see Section \ref{sec:multibandchroma}). Figure \ref{fig:wavelets} shows the wavelet basis $\psi_{\gamma}$ using Morlet wavelets (sinusoids localized in time by Gaussian envelopes --- see \cite{anden2014deep}).
+
+\begin{figure*}[h!]
+\centering
+\begin{minipage}{\columnwidth}
+	\centering
+	\includegraphics[width=1.0\columnwidth]{figs/wavelets_time.eps}
+\end{minipage}
+\begin{minipage}{\columnwidth}
+	\centering
+	\includegraphics[width=1.0\columnwidth]{figs/wavelets_freq.eps}
+\end{minipage}
+\caption{Morlet Wavelet basis $\psi_{\lambda}$. Top: Wavelets $\psi_{\lambda}(t)$ in time domain for one octave. Bottom: Wavelets $\hat{\psi}_{\gamma}(\omega)$ in frequency domain showing four octaves.}
+\label{fig:wavelets}
+\end{figure*}
+
+A windowing function $\phi(t)$ averages the signal $x(t)$ into temporal frames of size $T$. $\phi$ is therefore a low-pass filter with frequency support of $[-2\pi/T, 2\pi/T]$, covering the lowest end of the frequency range that is missed by the bandpass filters $\psi_{\gamma}$. While $\phi$ is not derived from dilations of the mother wavelet $\psi$, we refer to it as a wavelet for simplicity.  
+The wavelet transform is therefore computed by a constant-Q transform, convolving an input signal $x(t)$ with the wavelet basis $\{\phi, \psi_{\gamma}\}_{\gamma \in \mathbb{Z}}$: 
+
+\begin{equation}
+%|\mathbf{Wx}[t, \gamma] | =  \Big( x \ast \phi[t], \hspace{2mm} x \ast \psi_{\gamma}[t] \Big)_{t \in \mathbb{R}, \gamma \in \mathbb{Z}}
+\mathbf{Wx}[t, \gamma]  = | x \ast \psi_{\gamma} | \ast \phi(t)
+\end{equation}
+
+A wavelet modulus operator $\mathbf{Wx}[t, \gamma] $ removes the complex phase of all wavelet coefficients $|x \ast \psi_{\gamma}|$ but conserves low-frequency phase information contained in $x \ast \phi$. The wavelet operator $\mathbf{W}$ is contractive and, by Parseval's theorem, conserves energy, so $\mathbf{W}$ is invertible and the original signal $x$ can be recovered completely from its wavelet representation \cite{anden2014deep}. 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Time Scattering}
+\label{sec:timescattering}
+
+The wavelet transform $| x \ast \psi_{\gamma} | \ast \phi(t)$ is a time-frequency representation of $x$ in the frequency region supported by $\psi_{\gamma}$ averaged over a temporal frame of size $T$. The low-pass filter $\phi$ removes high-frequency content, which subsequent convolution with a second wavelet bank $\psi_{\gamma_2}$ recovers:
+
+\begin{equation}
+\mathbf{x_2} [t, \gamma_1, \gamma_2] = || x \ast \psi_{\gamma_1} | \ast \psi_{\gamma_2} |
+\end{equation}
+
+These coefficients encode the interferences of the signal with the wavelets $\psi_{\gamma_1}$ and $\psi_{\gamma_2}$, capturing the temporal evolution of $|x \ast \psi_{\gamma_1}|$ in the frequency range covered by $\psi_{\gamma_2}$. 
+
+This motivates a scattering transform $\mathbf{S_\nu}$ as a cascade of wavelet transforms and modulus operations, where the order $\nu$ determines the depth of the scattering network. The scattering coefficients through a path of filters $\mathbf{p} = (\gamma_1, \gamma_2, \dots, \gamma_{\nu}$) is therefore given by 
+
+\begin{equation}
+\mathbf{S_{\nu}x}[t, \mathbf{p}] = || \dots || x \ast \psi_{\gamma_1} | \ast \psi_{\gamma_2} | \ast \dots | \ast \psi_{\gamma_{\nu}} | \ast \phi(t)
+\end{equation}
+
+where averaging in time by $\phi$ again provides invariance to translation up to the frame length $T$. The scattering cascade of filtering and non-linearities (modulus rectifications) can therefore be considered as a convolutional network, and as such approaches current models of the auditory cortex \cite{chi2005multiresolution}. Second-order scattering coefficients are similar to the constant-Q modulation spectrogram as proposed by \cite{thompson2003nonuniform}, and have proven effective for audio classification tasks \cite{anden2014deep}, texture analysis and computer vision \cite{bruna2011classification}, and analysis of temporal dynamics in fetal heart rates \cite{chudacek2014scattering}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Joint Time-Frequency Scattering}
+\label{sec:timefrequencyscattering}
+
+The scattering transform decomposes each frequency band separately, and cannot therefore capture local structures across frequency. This limits the scattering transform's ability to encode deeper timbal structures such as frequency modulation or variable filters. By switching from one-dimensional wavelets in time to two-dimensional wavelets in time and log-frequency, we effectively treat the constant-Q spectrogram created by the wavelet transform $\mathbf{W}$ as an image.
+
+The two-dimensional wavelet $\Psi(t,\gamma)$ is defined as the product of a time wavelet $\psi_{\alpha}(t)$ and a log-frequency wavelet $\psi_{\beta}(\gamma)$
+
+\begin{equation}
+\Psi(t,\gamma) = \psi_{\alpha}(t) \psi_{\beta}(\gamma)
+\end{equation}
+
+The Fourier transform of $\psi_{\alpha}(t)$ is centered at $\alpha$ (a modulation frequency in Hertz), and the transform of $\psi_{\beta}(\gamma)$ is centered at $\beta$ (in units of cycles per octave).
+
+The second-order joint time-frequency scattering of $x$ is therefore given as a two-dimensional convolution of the constant-Q spectrogram with subsequent temporal averaging by $\phi$:
+
+\begin{equation}
+\mathbf{S_2} [t, \gamma_1, \gamma_2] = || x \ast \psi_{\gamma_1} | \ast \Psi_{\gamma_2} | \ast \phi(t)
+\end{equation}
+
+Joint time-frequency scattering was proposed in \cite{anden2015joint} and was inspired by the neurological auditory models proposed by Shamma and others in \cite{chi2005multiresolution} as the ``cortical transform'', which decomposes the output of the cochlea (\ie the constant-Q spectrogram) with two-dimensional Gabor wavelets.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Spiral Scattering}
+\label{sec:spiralscattering}
+
+The joint time-frequency scattering representation, while able to retrieve deep timbral structures such as frequency modulation and transient behavior, does so ignorant of the harmonic structures of pitched sounds. A spiral scattering representation, which introduces an octave variable, has been developed in 
+% cite ISMIR paper
+\cite{lostanlen2015wavelet}.
+
+As before, where we wrap the CQT $\mathbf{X}[t,\gamma]$ into a chroma representation (Section \ref{sec:multibandchroma}), the spiral scattering representation rolls the log-frequency variable $\gamma$ into a chroma spiral, making one complete rotation at each octave. $\gamma$ then decomposes into an integer octave variable $u$ and a pitch class $q \in [1,12]$:
+
+\begin{equation}
+\gamma = Qu + q
+\end{equation}
+
+where $Q = 12$ pitch classes per octave. 
+
+Another dimension is therefore added to the time-frequency wavelet $\Psi(t,\gamma)$ by splitting the log-frequency wavelet into a pitch-class and octave wavelet:
+
+\begin{equation}
+\Psi(t,\gamma) \rightarrow \Psi(t,q,u) = \psi_{\alpha}(t) \times \psi_{\beta^q}(q) \times \psi_{\beta^u}(u)
+\end{equation}
+
+Per \cite{lostanlen2015wavelet}, the Fourier transform of the spiral wavelet $\hat{\Psi}(t,q,u)$ is centered at ($\alpha, \beta^q, \beta^u$) and has a pitch chroma velocity of $\alpha/\beta^q$ octaves per second and a pitch height velocity of $\alpha/\beta^u$ octaves per second. 
+
+Separation of pitch into chroma height is not only driven by practices in Western music theory \cite{risset1969pitch}, but is supported by magnetic resonance imaging of the auditory cortex \cite{warren2003separating}.
+Given the centrality of the chroma representation to the task of chord recognition, we use the spiral scattering representation as a jumping off point to scatter wavelets directly over the chroma representation $\mathbf{X}[t,q,u]$. 
+

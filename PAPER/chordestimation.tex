@@ -1,0 +1,111 @@
+ % chordestimation.tex
+ % Chris Miller - crm313@nyu.edu
+ %
+ 
+ \section{Automatic Chord Estimation}
+ \label{sec:chordestimation}
+ 
+A system for automatic chord estimation typically consists of three stages:
+feature extraction, pattern matching, and post-filtering (decoding).
+
+At the first stage, the audio query is converted into a time series of
+pitch class profiles which represent the relative salience of
+pitch classes according to the twelve-tone equal temperament. Chroma features are therefore typically used, and have been since Fujishima first used them in a chord estimation context \cite{fujishima1999realtime}. In \cite{cho2013mirex}, a multi-stream (or multiband) chroma representation is introduced, and has achieved state-of-the-art results for large vocabulary chord recognition.
+
+At the second stage, each frame in the time series is assigned
+a chord label among a predefined vocabulary of $N$ chords. In this thesis we consider a large vocabulary of $N = 157$ chord labels --- 13 chord qualities with roots at all 12 pitch classes, plus the no-chord label.  A majority of chord recognition systems (including the one presented here) generate $N$ chord models using Gaussian Mixture Models (GMMs), deriving the models from existing annotated music samples \cite{lee2006automatic}. Finally, hidden Markov models (HMMs) are applied to the estimated chord sequence using the Viterbi algorithm to filter out unlikely chord changes \cite{papadopoulos2007large}.
+
+This section presents the multi-stream approach to feature extraction,
+as first introduced in \cite{cho2013mirex}, followed by the pattern matching and filtering steps used in conjunction with multiband chroma for large vocabulary chord estimation.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Multiband Chroma}
+\label{sec:multibandchroma}
+
+\begin{figure*}[!tbp]
+\centering
+\includegraphics[scale = 0.6]{figs/multiband.eps}
+\caption{Multiband chroma windowing for $K=4$ bands. Gaussian windows pictured on left covering 8 octaves in constant-Q pitch space, shown on right.}
+\label{fig:multiband}
+\end{figure*}
+
+The constant-Q transform $\mathbf{X}[t, \gamma]$ is a time-frequency
+representation whose center frequencies $2^{\gamma/Q}$ are in a geometric progression.
+By setting $Q=12$, the log-frequency variable $\gamma$ is akin to a pitch in twelve-tone
+equal temperament.
+Moreover, the Euclidean division $\gamma = Q \times u + q$
+reveals the octave $u$ and pitch class $q$,
+which play essential roles in music harmony.
+In all of the following, we reshape the constant-Q transform
+accordingly, and keep the notation $\mathbf{X}[t, q, u]$ for simplicity, resulting in a chroma representation \cite{cho2014on}.
+
+To address the disambiguation of chords in an extended vocabulary,
+\cite{cho2013mirex} divide the constant-Q spectrum into $K$
+bands by means of half-overlapping Gaussian windows along
+the log-frequency axis.
+The width $\sigma$ of the windows is inversely proportional
+to the desired number of bands $K$:
+in particular, it is of the order of one octave for $K=8$,
+and two octaves for $K=4$.
+The centers of the windows are denoted by $\gamma_k$, where
+the band index $k$ ranges from $0$ to $K-1$.
+Consequently, the multi-band chroma features are defined as the following
+three-way tensor:
+\begin{equation}
+\mathbf{Y}[t, q, k]
+=
+\sum_{u} 
+\mathbf{X}[t, q, u]
+\boldsymbol{w}[Q \times u + q - \gamma_k],
+\end{equation}
+where
+$\boldsymbol{w}[\gamma] = \exp( - \gamma^2 / (2\sigma^2))$
+is a Gaussian window of width $\sigma$, centered around zero.
+ 
+ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ \subsection{Pattern Matching}
+ \label{sec:GMM}
+ 
+ \subsubsection{Pre-Filtering}
+ 
+The constant-Q transform $\mathbf{X}[t,\gamma]$ segments the underlying signal $x(t)$ into temporal frames of size $T$. Per the Heisenberg uncertainty principle \cite{gabor}, the temporal frame size $T$ is often chosen to optimize frequency resolution for the CQT filter-bank, resulting in a frame rate that is much faster than typical rates of change of chords in musical signals. Pre-filtering of the multiband chroma representation $\mathbf{Y}[t,q,k]$ before sending to the pattern matching stage is useful to adapt the chroma features to more musically-relevant timescales. One approach uses moving average \cite{fujishima1999realtime} or moving median \cite{papadopoulos2007large} filters to smooth out neighboring frames in order to minimize the effect of transient behavior or noisy frames.
+
+Another approach is to create a beat-synchronous chroma representation \cite{bello2005robust}, operating on the assumption that chords tend to change on beats. Frames in-between beats are summed together to generate longer-range harmonic information and smooth out noisy frames, as well as to minimize computations downstream \cite{cho2014on}. The Tempogram Toolbox is used for beat extraction in all experiments conducted as part of this thesis \cite{grosche2011muller}.
+ 
+ \subsubsection{Likelihood Estimation}
+
+Given a dataset of audio files with annotated chord data, supervised learning techniques can be used to create chord models from a training dataset. Multivariate Gaussian Mixture Models (GMMs) are often used to model the probability distribution for a chord class based on a given chroma representation \cite{chothesis} \cite{papadopoulos2007large}. Distributions are characterized by a 12-dimensional vector of mean values $\mathbf{\mu}$ and covariance matrix $\mathbf{\Sigma}$ estimated from the training data using the Expectation Maximization (EM) algorithm \cite{sheh2003chord} \cite{moon1996expectation}.
+
+In order to extend the limited number of annotated chords in the training dataset, each chord is first rotated and transposed to have its root at C and used to generate the chord model for the given class (major, minor, dominant 7, etc.) rooted at C. The chord is then rotated through all other 11 roots and the respective chord models are trained accordingly (see \cite{sheh2003chord}). 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Viterbi Decoding}
+\label{sec:HMM}
+
+A Hidden Markov Model (HMM) seeks to characterize the temporal dynamics of features as a discrete Markov process based on a set of transition probabilities between states (\ie chords) (see \cite{rabiner1989tutorial}). With a large set of chord-annotated audio data, the matrix of transition probabilities from one chord to another can be generated automatically. Since the features $\mathbf{Y}[t,q,k]$ are beat-synchronized before chord modeling in this thesis, the symbolic chord annotations are also beat-synchronized so that the transition matrix captures the same frame-to-frame chord transition dynamics as our features.
+
+The Viterbi algorithm is typically used to decode HMMs, in our case by finding the most likely sequence of chords (a Markov process $\chi_{t}$) that results in the current $k$th chroma band (an observation sequence $O_t$). In other words, the Viterbi algorithm seeks to find the hidden state sequence $\chi_t$ that best explains the observations $O_t$, and does so by maximizing the conditional probability $\mathds{P}(\chi_t | O_t)$
+\footnote{For more on conditional probabilities, random variables, and Markov processes, see \cite{probabilityEssentials}. For more on HMMs and the Viterbi algorithm, see \cite{rabiner1989tutorial}.}.
+
+\begin{figure}
+\begin{center}
+\includegraphics[scale = 0.6]{figs/transmat.eps}
+\caption{Transition matrix for large chord vocabulary, shown on log-probability scale.}
+\label{fig:transmat}
+\end{center}
+\end{figure}
+
+The generated transition matrix for our large vocabulary of chords is shown in Figure \ref{fig:transmat}, displayed on a log-probability scale due to the extreme likelihood of self-transition from one chord state to itself. The deep red diagonal shows the self-transition case. The left side of the matrix shows the elevated probability of transition from all chords to a major quality chord, and image becomes darker moving to the right indicating the reduced likelihood of transitioning to more exotic chord qualities. 
+
+Chord models are built independently for each feature band $k$ in the multiband chroma tensor $\mathbf{Y}[t,q,k]$ using GMMs, resulting in $K$ end-to-end HMMs in parallel. At test time, the emission probability distributions of each model are aggregated such that they are the predicted outputs of a single state sequence. The computational complexity of the resulting $K$-stream HMM grows exponentially
+with the number of streams $K$.
+However, by assuming synchronicity and statistical independence of the streams,
+the aggregation boils down to a geometric mean, thus with linear complexity in $K$.
+It must be noted that the geometric mean does not yield a true probability distribution, as
+it does not sum to one.
+Yet, it is of widespread use \eg in speech recognition, due to its simplicity and computational
+tractability.
+
+Fed with multiband chroma features, the $K$-stream HMM
+has achieved state-of-the-art results on the McGill Billboard dataset at the
+MIREX evaluation campaign using $K=4$ streams \cite{cho2013mirex}.

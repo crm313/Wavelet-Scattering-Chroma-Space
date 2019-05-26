@@ -1,0 +1,27 @@
+\contentsline {section}{\numberline {1}Introduction}{7}
+\contentsline {section}{\numberline {2}Automatic Chord Estimation}{9}
+\contentsline {subsection}{\numberline {2.1}Multiband Chroma}{9}
+\contentsline {subsection}{\numberline {2.2}Pattern Matching}{10}
+\contentsline {subsubsection}{\numberline {2.2.1}Pre-Filtering}{10}
+\contentsline {subsubsection}{\numberline {2.2.2}Likelihood Estimation}{11}
+\contentsline {subsection}{\numberline {2.3}Viterbi Decoding}{11}
+\contentsline {section}{\numberline {3}Scattering Transform}{14}
+\contentsline {subsection}{\numberline {3.1}Wavelet Transform}{14}
+\contentsline {subsection}{\numberline {3.2}Time Scattering}{15}
+\contentsline {subsection}{\numberline {3.3}Joint Time-Frequency Scattering}{16}
+\contentsline {subsection}{\numberline {3.4}Spiral Scattering}{17}
+\contentsline {section}{\numberline {4}Haar Wavelets In Chroma Space}{19}
+\contentsline {subsection}{\numberline {4.1}Haar Wavelet Transform}{19}
+\contentsline {subsection}{\numberline {4.2}Deep Haar Scattering}{22}
+\contentsline {subsection}{\numberline {4.3}Representation Properties}{24}
+\contentsline {section}{\numberline {5}Experimental Setup and Evaluation}{27}
+\contentsline {section}{\numberline {6}Results}{28}
+\contentsline {section}{\numberline {7}Analysis}{32}
+\contentsline {subsection}{\numberline {7.1}Class Confusions}{32}
+\contentsline {subsection}{\numberline {7.2}Inverted Annotations}{32}
+\contentsline {subsection}{\numberline {7.3}Feature Normalization}{34}
+\contentsline {subsection}{\numberline {7.4}K-Stream Hidden Markov Model Aggregation}{35}
+\contentsline {subsubsection}{\numberline {7.4.1}Stream Fusion}{36}
+\contentsline {subsubsection}{\numberline {7.4.2}$k$-th Stream Voter Confidence}{37}
+\contentsline {section}{\numberline {8}Conclusions}{40}
+\contentsline {section}{References}{41}

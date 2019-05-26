@@ -1,0 +1,19 @@
+% conclusions.tex
+% 
+% LaTex document from NYU music technology master's thesis
+
+\section{Conclusions}
+\label{conclusions}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% add 500-1000 word summary of thesis to this point
+% okay if redundant -- should be somewhat redundant
+
+Automatic Chord Estimation (ACE) systems comprising of beat-synchronous multiband chroma representations, GMM pattern matching, and $k$-stream HMM decoding have shown state of the art results for large vocabulary chord estimation \cite{cho2013mirex}. This thesis develops a representation consisting of Haar wavelet transforms and scattering over the CQT in order to provide additional information for detecting extended and less-common chord classes. Crucially, these representations are invariant to joint octave transpositions and sensitive to chord inversions. 
+
+Our results do not yet show improved performance of the Haar wavelet transform or deep Haar wavelet scattering over the state of the art multiband chroma approaches for large vocabulary chord recognition. We do notice, however, that these two wavelet representations code for structures that multiband chroma does not when octaves are treated as independent ($K=8$), and approach multiband results for $K=4$ when considering alternative HMM fusion methods. Multiband and wavelet analysis differ significantly in that multiband chroma characterizes local information in $K$ frequency regions while the wavelet representations are multiresolution approaches with iteration depth of $log_2(K)$. Perhaps the question is not whether to use one or the other but when to use both. The efficient computations for Haar analysis presented in Section \ref{sec:haarwavelets} further motivate a complimentary approach.
+
+As seen in Section \ref{sec:fusion}, the fusion of $k$ HMM streams plays a significant role in the outcome of the chord recognition system --- a role whose effect is intricately tied to the feature extraction representation used. One as-yet unexplored avenue would forego independent HMM streams in the first place, and train a single GMM chord model on the full concatenated $K$ band representation. For Haar wavelet and scattering representations this seems initially attractive, as each $k$ band encodes information at different scales and resolutions. However, as the dimensionality of the representation starts to explode (a matrix of size $(12K \times T)$ where $T$ is the number of frames in the signal), the discriminability of the GMM begins to seriously suffer.
+
+This raises the question of whether or not the GMM is the correct classifier for pattern matching. GMMs undoubtably perform well when the multiband chroma is split up into bands of length $Q=12$ and fused later on, but in the interest of concatenating features, perhaps a different classifier such as random forests should be used. Future work will focus on how different classifiers effect chord recognition systems fed with wavelet scattering representations.

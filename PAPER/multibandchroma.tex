@@ -1,0 +1,79 @@
+% multibandchroma.tex
+% Chris Miller - crm313@nyu.edu
+% 
+
+\section{Multiband Chroma}
+\label{sec:chroma}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\subsection{CQT and Chroma Wrapping}
+%\label{sec:cqt}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\subsection{Multiband Chroma}
+%\label{sec:multibandchroma}
+
+A system for automatic chord estimation typically consists of two stages:
+feature extraction and acoustic modeling.
+At the first stage, the audio query is converted into a time series of
+pitch class profiles, which represent the relative salience of
+pitch classes according to the twelve-tone equal temperament.
+At the second stage, each frame in the time series is assigned
+a chord label among a predefined vocabulary.
+This section presents a multi-stream approach to acoustic modeling,
+as first introduced in \cite{cho2013mirex}.
+
+The constant-Q transform $\mathbf{X}[t, \gamma]$ is a time-frequency
+representation whose center frequencies $2^{\gamma/Q}$ are in a geometric progression.
+By setting $Q=12$, the log-frequency variable $\gamma$ is akin to a pitch in twelve-tone
+equal temperament.
+Moreover, the Euclidean division $\gamma = Q \times u + q$
+reveals the octave $u$ and pitch class $q$,
+which play an essential role in music harmony.
+In all of the following, we reshape the constant-Q transform
+accordingly, and keep the notation $\mathbf{X}[t, q, u]$ for simplicity.
+
+To address the disambiguation of chords in an extended vocabulary,
+\cite{cho2013mirex} divide the constant-Q spectrum into $K$
+bands by means of half-overlapping Gaussian windows along
+the log-frequency axis.
+The width $\sigma$ of the windows is inversely proportional
+to the desired number of bands $K$:
+in particular, it is of the order of one octave for $K=8$,
+and two octaves for $K=4$.
+The centers of the windows are denoted by $\gamma_k$, where
+the band index $k$ ranges from $0$ to $K-1$.
+Consequently, the multi-band chroma features are defined as the following
+three-way tensor:
+\begin{equation}
+\mathbf{Y}[t, q, k]
+=
+\sum_{u} 
+\mathbf{X}[t, q, u]
+\boldsymbol{w}[Q \times u + q - \gamma_k],
+\end{equation}
+where
+$\boldsymbol{w}[\gamma] = \exp( - \gamma^2 / (2\sigma^2))$
+is a Gaussian window of width $\sigma$, centered around zero.
+
+Acoustic modeling is classically achieved with a hidden Markov model (HMM)
+whose states are estimated as mixtures of multivariate Gaussian probability
+distributions, \ie Gaussian mixture models (GMM) in dimension $Q=12$.
+In order to extend this framework to multi-band chroma features, \cite{cho2013mirex}
+train $K$ end-to-end models in parallel over each feature map $k$
+of the tensor $\mathbf{Y}[t, q, k]$.
+At test time, the emission probability distributions of each model
+are aggregated such that they are the predicted outputs of a single state sequence.
+
+The computational complexity of the resulting $K$-stream HMM grows exponentially
+with the number of streams $K$.
+However, by assuming synchronicity and statistical independence of the streams,
+the aggregation boils down to a geometric mean, thus with linear complexity in $K$.
+It must be noted that the geometric mean does not yield a true probability distribution, as
+it does not sum to one.
+Yet, it is of widespread use \eg in speech recognition, due to its simplicity and computational
+tractability.
+
+Fed with multiband chroma features, the $K$-stream HMM
+has achieved state-of-the-art results on the McGill Billboard dataset at the
+MIREX evaluation campaign \cite{cho2013mirex}.
