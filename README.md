@@ -7,4 +7,5 @@ State of the art automatic chord recognition systems rely on multiband chroma re
 Repository contains code implementing and evaluating the above-described chord recognition system. 
 
 Data used comes from MedleyDB - https://medleydb.weebly.com/
+
 Evaluation uses mir_eval package https://craffel.github.io/mir_eval/#id2
