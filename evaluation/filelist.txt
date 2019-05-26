@@ -1,0 +1,3 @@
+/Users/chrismiller/Desktop/Work/NYU-MIR/data/01_-_I_Saw_Her_Standing_There.wav
+/Users/chrismiller/Desktop/Work/NYU-MIR/data/07_-_Please_Please_Me.wav
+/Users/chrismiller/Desktop/Work/NYU-MIR/data/08_-_Love_Me_Do.wav
